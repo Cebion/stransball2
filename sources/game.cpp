@@ -8,6 +8,7 @@
 #endif
 
 #include <stdio.h>
+#include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
 #include "SDL/SDL.h"
@@ -84,6 +85,9 @@ extern TRANSBALL *game;
 /* Frames per second counter: */ 
 extern int frames_per_sec;
 
+extern char *datadir;
+extern char *confdir;
+
 FILE *replayfile;
 int replaynum;
 int replay_source=0;
@@ -92,7 +96,7 @@ int replay_source=0;
 SDLKey THRUST_KEY=SDLK_q,ANTITHRUST_KEY=SDLK_a,LEFT_KEY=SDLK_o,RIGHT_KEY=SDLK_p;
 SDLKey FIRE_KEY=SDLK_SPACE,ATRACTOR_KEY=SDLK_RETURN;
 SDLKey PAUSE_KEY=SDLK_F1;
-bool pause=false;
+bool pause2=false;
 
 unsigned char old_keyboard[SDLK_LAST];
 SDL_Surface *image=0,*image2=0;	/* For the tittle screen, etc. */ 
@@ -133,8 +137,10 @@ bool gamecycle(SDL_Surface *screen,int sx,int sy)
 		strcpy(tmp,"maps/");
 		strcat(tmp,levelpack);
 
+		chdir(datadir);
 		decode(tmp,"decoding.tmp");
 
+		chdir(confdir);
 		fp=fopen("decoding.tmp","r+");
 		if (fp!=0) {
 			fscanf(fp,"%i",&NLEVELS);
@@ -166,6 +172,8 @@ bool gamecycle(SDL_Surface *screen,int sx,int sy)
 	} /* if */ 
 
 	if (NLEVELS==-1) return false;
+
+	chdir(datadir);
 
 	switch(STATE) {
 	case 0:	if (!state_logo_cycle(screen,sx,sy,keyboard)) return false;

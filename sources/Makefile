@@ -1,3 +1,4 @@
+TARGET=supertransball2
 OBJS := \
 	auxiliar.o           configuration.o     encoder.o \
 	enemies.o            fonts.o       	 game.o \
@@ -8,20 +9,27 @@ OBJS := \
 	state_levelfinished.o state_logo.o       state_mainmenu.o \
 	state_replay.o       state_replaymanager.o \
 	state_typetext.o     tiles.o             transball.o \
-	sge/sge_blib.o 		 sge/sge_collision.o sge/sge_misc.o \
-	sge/sge_primitives.o sge/sge_rotation.o  sge/sge_shape.o \
-	sge/sge_surface.o
 
-all: stransball2
+all: $(TARGET)
+
 
 %.o: %.cpp
-	c++ -c -g3 -O3 $< -o $@ `sdl-config --cflags` -I/usr/local/include/SDL -I/opt/local/include/SDL -Isge
+	$(CXX) -c -g3 -O3 $< -o $@ $(CPPFLAGS) $(CFLAGS) `sdl-config --cflags` -I/usr/local/include/SDL
 
 # dynamically linked binary:
-stransball2: $(OBJS)
-	c++ $^ -o $@ `sdl-config --libs` -lSDL_image -lSDL_mixer -lSDL_sound -I/usr/local/include/SDL
-	mv ./stransball2 ..
+$(TARGET): $(OBJS)
+	$(CXX) $^ -o $@ $(LDFLAGS) `sdl-config --libs` -lSDL_image -lSDL_mixer -lSGE -I/usr/local/include/SDL
+	mv ./$(TARGET) ..
 
 clean:
-	rm -f stransball2
+	rm -f ../$(TARGET)
 	rm -f *.o
+
+install:
+	install -o root -g games -m 755 ../$(TARGET) $(DESTDIR)/usr/games
+
+install-data:
+	install -o root -g games -m 644 ../demos/* $(DESTDIR)/usr/share/games/supertransball2/demos/
+	install -o root -g games -m 644 ../sound/* $(DESTDIR)/usr/share/games/supertransball2/sound/
+	cp -r ../maps/* $(DESTDIR)/usr/share/games/supertransball2/maps/
+	install -o root -g games -m 644 ../graphics/* $(DESTDIR)/usr/share/games/supertransball2/graphics/

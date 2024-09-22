@@ -43,7 +43,7 @@ extern int replay_source;
 extern SDLKey THRUST_KEY,ANTITHRUST_KEY,LEFT_KEY,RIGHT_KEY;
 extern SDLKey FIRE_KEY,ATRACTOR_KEY;
 extern SDLKey PAUSE_KEY;
-extern bool pause;
+extern bool pause2;
 extern unsigned char old_keyboard[SDLK_LAST];
 extern SDL_Surface *image,*image2;
 extern char edit_text[80];

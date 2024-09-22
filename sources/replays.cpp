@@ -1,5 +1,8 @@
 #include "stdio.h"
+#include "unistd.h"
 
+extern char* datadir;
+extern char* confdir;
 
 int replay_parameters(char *file, int *ship, int *length, char *levelname)
 {
@@ -8,7 +11,9 @@ int replay_parameters(char *file, int *ship, int *length, char *levelname)
 	int l,end;
 	int v1,v2,fuel;
 
+        chdir(confdir);
 	fp=fopen(file,"rb");
+        chdir(datadir);
 	if (fp==0) return -1;
 	v1=fgetc(fp);
 	v2=fgetc(fp);
@@ -35,8 +40,11 @@ void replay_copy(char *f1,char *f2)
 
 	FILE *fp1,*fp2;
 
+        chdir(confdir);
 	fp1=fopen(f1,"rb");
+        /* chdir(confdir); */
 	fp2=fopen(f2,"wb");
+        chdir(datadir);
 
 	do{
 		fputc(fgetc(fp1),fp2);

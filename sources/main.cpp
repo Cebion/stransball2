@@ -12,6 +12,11 @@
 #include "SDL_mixer.h"
 #include "sge.h"
 
+#include <string.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+
 #include "fonts.h"
 #include "list.h"
 
@@ -42,6 +47,8 @@ int frames_per_sec=0;
 int frames_per_sec_tmp=0;
 int init_time=0;
 
+char *datadir="data/";
+char *confdir;
 
 /* Surfaces: */ 
 SDL_Surface *screen_sfc=0,*buffer_screen_sfc=0;
@@ -125,6 +132,43 @@ int main(int argc, char** argv)
 {
 	setupTickCount();
 #endif
+
+    char *env_data_dir = getenv("SUPERTRANSBALL2_DATA_DIR");
+    if (env_data_dir != NULL && *env_data_dir != '\0') {
+        datadir = env_data_dir;
+    }
+
+    char *env_conf_dir = getenv("SUPERTRANSBALL2_CONFIG_DIR");
+    if (env_conf_dir != NULL && *env_conf_dir != '\0') {
+        confdir = strdup(env_conf_dir);
+    } else {
+        confdir = (char*)malloc(strlen(getenv("HOME"))+50);
+        strcpy(confdir, getenv("HOME"));
+        strcat(confdir, "/.supertransball2");
+    }
+
+        mode_t mode;
+        FILE *cfg;
+	confdir=(char*)malloc(strlen(getenv("HOME"))+50); strcpy(confdir,getenv("HOME"));
+        strcat(confdir,"/.supertransball2");
+	mode=S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IXGRP;
+	mkdir(confdir,mode);
+	chdir(confdir);
+	mkdir("replays",mode);
+	mkdir("high",mode);
+
+	cfg=fopen("transball.cfg", "r");
+	if (!cfg)
+	{
+		cfg=fopen("transball.cfg", "w");
+                fprintf(cfg,"%s","113 97 111 112 32 13 282");
+	}
+
+	fclose(cfg);
+	
+	printf("Configuration: %s\n",confdir);
+        printf("Data: %s\n",datadir);
+        chdir(datadir);
 
 	int time,act_time;
 	SDL_Event event;

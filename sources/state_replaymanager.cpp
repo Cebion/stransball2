@@ -8,6 +8,7 @@
 #endif
 
 #include <stdio.h>
+#include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
 #include "SDL/SDL.h"
@@ -43,7 +44,7 @@ extern int replay_source;
 extern SDLKey THRUST_KEY,ANTITHRUST_KEY,LEFT_KEY,RIGHT_KEY;
 extern SDLKey FIRE_KEY,ATRACTOR_KEY;
 extern SDLKey PAUSE_KEY;
-extern bool pause;
+extern bool pause2;
 extern unsigned char old_keyboard[SDLK_LAST];
 extern SDL_Surface *image,*image2;
 extern char edit_text[80];
@@ -63,6 +64,8 @@ extern char *leveltext[MAXLEVELS];
 extern char *levelcode[MAXLEVELS];
 extern int initialfuel[MAXLEVELS];
 
+extern char *datadir;
+extern char *confdir;
 
 bool state_replaymanager_cycle(SDL_Surface *screen,int sx,int sy,unsigned char *keyboard)
 {
@@ -103,6 +106,7 @@ bool state_replaymanager_cycle(SDL_Surface *screen,int sx,int sy,unsigned char *
 		DIR *dp;
 		struct dirent *ep;
 		  
+		chdir(confdir);
 		if (replay_source==0) dp = opendir ("replays");
 						 else dp = opendir ("high");
 		if (dp != NULL)
@@ -124,6 +128,7 @@ bool state_replaymanager_cycle(SDL_Surface *screen,int sx,int sy,unsigned char *
 			 }
 			(void) closedir (dp);
 		 }
+		chdir(datadir);
 #endif                          
 		first_file=0;
 		act_file=0;		
@@ -210,7 +215,9 @@ bool state_replaymanager_cycle(SDL_Surface *screen,int sx,int sy,unsigned char *
 
 				if (replay_source==0) sprintf(tmp,"replays/%s",files[act_file]);
 								 else sprintf(tmp,"high/%s",files[act_file]);
+				chdir(confdir);
 				replayfile=fopen(tmp,"rb");
+				chdir(datadir);
 				v1=fgetc(replayfile);
 				v2=fgetc(replayfile);	// To maintain compatibility with a previous version
 
@@ -309,6 +316,7 @@ bool state_replaymanager_cycle(SDL_Surface *screen,int sx,int sy,unsigned char *
 				DIR *dp;
 				struct dirent *ep;
 				  
+				chdir(confdir);
 				dp = opendir ("replays");
 				if (dp != NULL)
 				 {
@@ -329,6 +337,7 @@ bool state_replaymanager_cycle(SDL_Surface *screen,int sx,int sy,unsigned char *
 					 }
 					(void) closedir (dp);
 				 }
+				chdir(datadir);
 #endif                  
 				
 				/* Check if this replay is a highscore: */ 

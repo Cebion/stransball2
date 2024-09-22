@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <unistd.h>
 #include <stdlib.h>
 #include "SDL/SDL.h"
 #include "SDL_mixer.h"
@@ -13,6 +14,8 @@
 #define EMPTY_ROWS	8
 #define FACTOR	512
 
+extern char *datadir;
+extern char *confdir;
 
 TRANSBALL_MAP::TRANSBALL_MAP(char *file)
 {
@@ -25,6 +28,7 @@ TRANSBALL_MAP::TRANSBALL_MAP(char *file)
 	S_enemyhit=0;
 	S_switch=0;
 
+	chdir(datadir);
 	fp=fopen(file,"r");
 	if (fp==0) {
 		sx=0;

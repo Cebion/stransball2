@@ -43,7 +43,7 @@ extern int replay_source;
 extern SDLKey THRUST_KEY,ANTITHRUST_KEY,LEFT_KEY,RIGHT_KEY;
 extern SDLKey FIRE_KEY,ATRACTOR_KEY;
 extern SDLKey PAUSE_KEY;
-extern bool pause;
+extern bool pause2;
 extern unsigned char old_keyboard[SDLK_LAST];
 extern SDL_Surface *image,*image2;
 extern char edit_text[80];
@@ -71,11 +71,11 @@ bool state_replay_cycle(SDL_Surface *screen,int sx,int sy,unsigned char *keyboar
 	SUBSTATE++;
 
 	if (keyboard[PAUSE_KEY] && !old_keyboard[PAUSE_KEY]) {
-		if (pause) pause=false;
-			  else pause=true;
+		if (pause2) pause2=false;
+			  else pause2=true;
 	} /* if */ 
 
-	if (!pause) {
+	if (!pause2) {
 		int i;
 		unsigned char tmp[SDLK_LAST];
 		for(i=0;i<SDLK_LAST;i++) tmp[i]=0;
@@ -91,7 +91,7 @@ bool state_replay_cycle(SDL_Surface *screen,int sx,int sy,unsigned char *keyboar
 
 	game->render(screen,sx,sy);
 
-	if (pause) {
+	if (pause2) {
 		surface_fader(screen,0.5F,0.5F,0.5F,-1,0);
 		font_print(sx/2,sy/2-16,"PAUSE",screen);
 	} else {

@@ -48,7 +48,7 @@ SDL_Surface *load_maskedimage(char *imagefile,char *maskfile,char *path)
 	mask=IMG_Load(name);
 
     if (tmp==0 ||
-		mask==0) return false;
+		mask==0) return 0;
 
 	res=SDL_DisplayFormatAlpha(tmp);
 

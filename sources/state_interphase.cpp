@@ -8,6 +8,7 @@
 #endif
 
 #include <stdio.h>
+#include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
 #include "SDL/SDL.h"
@@ -43,7 +44,7 @@ extern int replay_source;
 extern SDLKey THRUST_KEY,ANTITHRUST_KEY,LEFT_KEY,RIGHT_KEY;
 extern SDLKey FIRE_KEY,ATRACTOR_KEY;
 extern SDLKey PAUSE_KEY;
-extern bool pause;
+extern bool pause2;
 extern unsigned char old_keyboard[SDLK_LAST];
 extern SDL_Surface *image,*image2;
 extern char edit_text[80];
@@ -63,6 +64,8 @@ extern char *leveltext[MAXLEVELS];
 extern char *levelcode[MAXLEVELS];
 extern int initialfuel[MAXLEVELS];
 
+extern char *datadir;
+extern char *confdir;
 
 bool state_interphase_cycle(SDL_Surface *screen,int sx,int sy,unsigned char *keyboard)
 {
@@ -92,7 +95,9 @@ bool state_interphase_cycle(SDL_Surface *screen,int sx,int sy,unsigned char *key
 			if (game=0) delete game;
 			game=new TRANSBALL("graphics/","sound/","maps/",initialfuel[level],levelnames[level],ship_type);
 			sprintf(tmp,"replays/replay%.3i.rpl",replaynum++);
+			chdir(confdir);
 			replayfile=fopen(tmp,"wb+");
+			chdir(datadir);
 			fputc(32,replayfile);
 			fputc(0,replayfile);
 			/* level name: */ 

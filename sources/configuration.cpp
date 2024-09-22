@@ -1,4 +1,5 @@
 #include "stdio.h"
+#include <unistd.h>
 
 #include "SDL.h"
 
@@ -9,13 +10,17 @@ extern SDLKey PAUSE_KEY;
 extern bool fullscreen;
 extern int PIXEL_SIZE;
 
+extern char *datadir;
+extern char *confdir;
 
 bool load_configuration(void)
 {
 	int a,b,c,d,e,f,g;
 	FILE *fp;
 
+	chdir(confdir);
 	fp=fopen("transball.cfg","r");
+	chdir(datadir);
 
 	if (fp==0) return false;
 
@@ -46,7 +51,9 @@ void save_configuration(void)
 {
 	FILE *fp;
 
+	chdir(confdir);
 	fp=fopen("transball.cfg","w");
+	chdir(datadir);
 	
 	if (fp==0) return;
 

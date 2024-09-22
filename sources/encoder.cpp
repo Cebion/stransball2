@@ -1,4 +1,8 @@
 #include "stdio.h"
+#include "unistd.h"
+
+extern char *confdir;
+extern char *datadir;
 
 void encode(char *in,char *out)
 {
@@ -9,8 +13,11 @@ void encode(char *in,char *out)
 	FILE *fpin;
 	FILE *fpout;
 
+	chdir(datadir);
 	fpin=fopen(in,"rb");
+	chdir(confdir);
 	fpout=fopen(out,"wb");
+	chdir(datadir);
 	if (fpin==0 || fpout==0) return;
 
 	do{
@@ -40,8 +47,11 @@ void decode(char *in,char *out)
 	FILE *fpin;
 	FILE *fpout;
 
+	chdir(datadir);
 	fpin=fopen(in,"rb");
+	chdir(confdir);
 	fpout=fopen(out,"wb");
+	chdir(datadir);
 	if (fpin==0 || fpout==0) return;
 
 	do{

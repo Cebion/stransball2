@@ -36,7 +36,7 @@ int COLOUR_DEPTH=32;
 //bool fullscreen=true;
 bool fullscreen=true;
 #else
-bool fullscreen=false;
+bool fullscreen=true;
 #endif
 
 /* Redrawing constant: */ 
@@ -93,7 +93,7 @@ SDL_Surface* initializeSDL(int moreflags)
 	SDL_Surface *screen;
 
 	//int flags = SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_HWPALETTE;
-	int flags = SDL_HWPALETTE|moreflags;
+	int flags = SDL_HWPALETTE | SDL_FULLSCREEN | moreflags;
 	if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO)<0) return 0;
 	atexit(SDL_Quit);
 	SDL_WM_SetCaption("Super Transball 2 v1.5", 0);
